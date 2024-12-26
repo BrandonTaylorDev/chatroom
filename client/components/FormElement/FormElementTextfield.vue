@@ -3,11 +3,13 @@
   type Props = {
     modelValue?: string
     label?: string
+    type?: 'text' | 'password'
   }
   
   const props = withDefaults(defineProps<Props>(), {
     modelValue: '',
     label: '',
+    type: 'text'
   });
 
   const emit = defineEmits([ 'update:modelValue' ]);
@@ -42,7 +44,7 @@
             ? 'pt-2'
             : null
         ]"
-        type="text"
+        :type="type"
         autocomplete="off"
         :value="modelValue"
         @input="$event => emit('update:modelValue', ($event.target as HTMLInputElement).value)"
