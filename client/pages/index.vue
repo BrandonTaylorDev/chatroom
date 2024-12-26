@@ -1,9 +1,49 @@
 <script setup lang="ts">
   import type { Message } from '~/types/Message';
 
-  const messages = ref([
-    
-  ] as Message[]);
+  const messages = ref([] as Message[]);
+  let socket: WebSocket | null = null;
+
+  onMounted(() => {
+
+    // Initialize WebSocket connection
+    socket = new WebSocket('ws://127.0.0.1:9002');
+
+    // Listen for incoming messages
+    socket.addEventListener('message', (event) => {
+      const receivedMessage: Message = JSON.parse(event.data);
+      messages.value.push(receivedMessage);
+    });
+
+    // Handle connection close
+    socket.addEventListener('close', () => {
+      console.log('WebSocket connection closed');
+    });
+
+    // Handle errors
+    socket.addEventListener('error', (error) => {
+      console.error('WebSocket error:', error);
+    });
+  });
+
+  onUnmounted(() => {
+
+    // Close WebSocket connection when component is unmounted
+    if (socket) {
+      socket.close();
+      socket = null;
+    }
+  });
+
+  const sendMessage = (msg: string) => {
+    if (socket) {
+      socket.send(JSON.stringify({
+        author: '',
+        text: msg,
+        createdAt: new Date().getTime()
+      } as Message));
+    }
+  }
 </script>
 
 <template>
@@ -13,7 +53,7 @@
     </div>
 
     <div class="p-4 bg-slate-900">
-      <FormSendMessage />
+      <FormSendMessage @submit="msg => sendMessage(msg)" />
     </div>
   </div>
 </template>

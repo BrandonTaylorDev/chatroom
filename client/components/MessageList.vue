@@ -8,10 +8,21 @@
   const props = withDefaults(defineProps<Props>(), {
     messages: () => []
   });
+  const messageListRef = ref<HTMLDivElement | null>(null);
+
+  watch(props.messages, async () => {
+    await nextTick();
+    if (messageListRef.value) {
+      messageListRef.value.scrollTop = messageListRef.value.scrollHeight;
+    }
+  });
 </script>
 
 <template>
-  <div class="h-[calc(100dvh-5rem)] flex flex-col overflow-y-scroll gap-4 text-slate-950 dark:text-slate-50">
+  <div
+    ref="messageListRef"
+    class="h-[calc(100dvh-9rem)] sm:h-[calc(100dvh-5rem)] flex flex-col overflow-y-scroll gap-4 text-slate-950 dark:text-slate-50"
+  >
     <div
       v-for="message in props.messages"
       :key="message.id"

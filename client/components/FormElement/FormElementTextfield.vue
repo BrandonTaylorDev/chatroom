@@ -43,6 +43,7 @@
             : null
         ]"
         type="text"
+        autocomplete="off"
         :value="modelValue"
         @input="$event => emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         @focusin="hasFocusOrValue = true"
