@@ -21,7 +21,7 @@
 <template>
   <div
     ref="messageListRef"
-    class="h-[calc(100dvh-9rem)] sm:h-[calc(100dvh-5rem)] flex flex-col overflow-y-scroll gap-4 text-slate-950 dark:text-slate-50"
+    class="bg-red-200 flex flex-col overflow-y-scroll gap-4 text-slate-950 dark:text-slate-50"
   >
     <div
       v-for="message in props.messages"

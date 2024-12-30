@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
   const users = await readUsersFile();
 
   /**
-   * this is very insecure! in production systems, you should have your passwords and use a real database!
+   * this is very insecure! in production systems, you should hash your passwords and use a real database!
    */
   const user = users.find(u => u.username === username);
 
@@ -62,6 +62,13 @@ export default defineEventHandler(async (event) => {
       message: 'Invalid password'
     }
   }
+
+  setCookie(event, 'sid', Math.random().toString(36).substring(2) + Date.now().toString(), {
+    path: '/',
+    maxAge: 60 * 60 * 24 * 30,
+    sameSite: 'lax',
+    httpOnly: true
+  })
   
   return {
     success: true,
